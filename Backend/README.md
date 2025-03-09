@@ -89,7 +89,7 @@ curl -X POST http://localhost:3000/users/register \
 }
 ```
 
-### Response Fields
+### Response Fields for the user registeration
 - `token` (string): JWT token for authentication.
 - `user` (object):
   - `fullname` (object):
