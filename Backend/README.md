@@ -194,3 +194,126 @@ curl -X POST http://localhost:3000/users/login \
     - `lastname` (string): User's last name (minimum 3 characters).
   - `email` (string): User's email address (must be a valid email).
   - `_id` (string): User's unique identifier.
+
+# User Profile Endpoint
+
+## Method and Endpoint
+**Method:** GET  
+**Endpoint:** `/users/profile`
+
+## Description
+This endpoint retrieves the profile information of the authenticated user.
+
+## Headers
+- `Authorization`: Bearer token (Required)
+  ```
+  Authorization: Bearer <jwt_token>
+  ```
+
+## Responses
+### Response Fields for the user profile
+- `token` (string): JWT token for authentication.
+- `user` (object):
+  - `fullname` (object):
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `_id` (string): User's unique identifier.
+
+
+### Success
+- **Status Code:** 200 OK
+- **Response Body:**
+  ```json
+  {
+    "_id": "string",
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string"
+  }
+  ```
+
+### Error
+- **Status Code:** 401 Unauthorized
+- **Response Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+## Example Request
+```bash
+curl -X GET http://localhost:3000/users/profile \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
+
+## Example Response
+```json
+{
+  "_id": "60d0fe4f5311236168a109ca",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+# User Logout Endpoint
+
+## Method and Endpoint
+**Method:** GET  
+**Endpoint:** `/users/logout`
+
+## Description
+This endpoint logs out the currently authenticated user by invalidating their token.
+
+Logout the current user and black list the token provided in cookie or header will be removed 
+
+## Headers
+- `Authorization`: Bearer token (Required)
+  ```
+  Authorization: Bearer <jwt_token>
+  ```
+
+### Response Fields for the user login
+- `user` (object):
+  - `fullname` (object):
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `_id` (string): User's unique identifier.
+
+### Success
+- **Status Code:** 200 OK
+- **Response Body:**
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+### Error
+- **Status Code:** 401 Unauthorized
+- **Response Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+## Example Request
+```bash
+curl -X GET http://localhost:3000/users/logout \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
+
+## Example Response
+```json
+{
+  "message": "Logged out successfully"
+}
+```
