@@ -436,26 +436,253 @@ curl -X POST http://localhost:3000/captains/register \
     }
   }
 }
-
-
 ```
 
-## Example Response
-
+### Example Response Fields
 
 **captain** (object):  
 - **fullname** (object):  
-  - **firstname** (string): User's first name  
-  - **lastname** (string): User's last name  
+  - **firstname** (string): Captain's first name  
+  - **lastname** (string): Captain's last name  
+- **email** (string): Captain's email address  
+- **vehicle** (object):  
+  - **color** (string): Vehicle color  
+  - **capacity** (number): Vehicle passenger capacity  
+  - **vehicleType** (string): Type of vehicle (car/motorcycle/auto)  
+  - **plate** (string): Vehicle license plate number  
+- **_id** (string): Captain's unique identifier
+**token** (string): JWT authentication token
 
-- **email** (string): User's email address  
-- **password** (string): User's password  
+# Captain Endpoints Documentation
 
-**vehicle** (object):  
-- **color** (string): Vehicle color  
-- **capacity** (number): Vehicle capacity  
-- **vehicleType** (string): Vehicle type  
-- **plate** (string): Vehicle number plate  
+# Captain Registration Endpoint
 
-**token** (string): JWT Token  
+## Method and Endpoint
+**Method:** POST  
+**Endpoint:** `/captains/register`
+
+## Description
+This endpoint is used to register a new captain. It requires the captain's personal information including vehicle details.
+
+## Request Body
+The request body should be a JSON object with the following structure:
+```json
+{
+  "fullname": {
+    "firstname": "string",
+    "lastname": "string"
+  },
+  "email": "string",
+  "password": "string",
+  "vehicle": {
+    "color": "string",
+    "plate": "string",
+    "capacity": "number",
+    "vehicleType": "string"
+  }
+}
+```
+
+### Fields
+- `fullname.firstname` (string, required): Must be at least 3 characters long
+- `fullname.lastname` (string, optional)
+- `email` (string, required): Must be a valid email format
+- `password` (string, required): Must be at least 5 characters long
+- `vehicle.color` (string, required): Must be at least 3 characters long
+- `vehicle.plate` (string, required): Must be at least 3 characters long
+- `vehicle.capacity` (number, required): Must be at least 1
+- `vehicle.vehicleType` (string, required): Must be one of: 'car', 'motorcycle', 'auto'
+
+## Responses
+
+### Success (201 Created)
+```json
+{
+  "token": "string",
+  "captain": {
+    "_id": "string",
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    }
+  }
+}
+```
+
+### Error (400 Bad Request)
+```json
+{
+  "errors": [
+    {
+      "msg": "string",
+      "param": "string",
+      "location": "string"
+    }
+  ]
+}
+```
+
+# Captain Login Endpoint
+
+## Method and Endpoint
+**Method:** POST  
+**Endpoint:** `/captains/login`
+
+## Description
+This endpoint authenticates a captain and provides an access token.
+
+## Request Body
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Fields
+- `email` (string, required): Must be a valid email format
+- `password` (string, required): Must be at least 5 characters long
+
+## Responses
+
+### Success (200 OK)
+```json
+{
+  "token": "string",
+  "captain": {
+    "_id": "string",
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    }
+  }
+}
+```
+
+### Example Response Fields
+
+**captain** (object):  
+- **fullname** (object):  
+  - **firstname** (string): Captain's first name  
+  - **lastname** (string): Captain's last name  
+- **email** (string): Captain's email address  
+- **vehicle** (object):  
+  - **color** (string): Vehicle color  
+  - **capacity** (number): Vehicle passenger capacity  
+  - **vehicleType** (string): Type of vehicle (car/motorcycle/auto)  
+  - **plate** (string): Vehicle license plate number  
+- **_id** (string): Captain's unique identifier
+**token** (string): JWT authentication token
+
+### Error (401 Unauthorized)
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+# Captain Profile Endpoint
+
+## Method and Endpoint
+**Method:** GET  
+**Endpoint:** `/captains/profile`
+
+## Description
+Retrieves the profile information of the authenticated captain.
+
+## Headers
+- `Authorization`: Bearer token (Required)
+```
+Authorization: Bearer <jwt_token>
+```
+
+## Responses
+
+### Success (200 OK)
+```json
+{
+  "_id": "string",
+  "fullname": {
+    "firstname": "string",
+    "lastname": "string"
+  },
+  "email": "string",
+  "vehicle": {
+    "color": "string",
+    "plate": "string",
+    "capacity": "number",
+    "vehicleType": "string"
+  }
+}
+```
+
+### Example Response Fields
+
+**captain** (object):  
+- **fullname** (object):  
+  - **firstname** (string): Captain's first name  
+  - **lastname** (string): Captain's last name  
+- **email** (string): Captain's email address  
+- **vehicle** (object):  
+  - **color** (string): Vehicle color  
+  - **capacity** (number): Vehicle passenger capacity  
+  - **vehicleType** (string): Type of vehicle (car/motorcycle/auto)  
+  - **plate** (string): Vehicle license plate number  
+- **_id** (string): Captain's unique identifier
+
+### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+# Captain Logout Endpoint
+
+## Method and Endpoint
+**Method:** GET  
+**Endpoint:** `/captains/logout`
+
+## Description
+Logs out the captain and invalidates the current token.
+
+## Headers
+- `Authorization`: Bearer token (Required)
+```
+Authorization: Bearer <jwt_token>
+```
+
+## Responses
+
+### Success (200 OK)
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+### Example Response Fields
+
+**message** (string): Success message indicating logout status
+
+### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
 
