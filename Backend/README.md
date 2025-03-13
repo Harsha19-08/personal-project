@@ -317,3 +317,145 @@ curl -X GET http://localhost:3000/users/logout \
   "message": "Logged out successfully"
 }
 ```
+
+# Captain Registration Endpoint
+
+## Method and Endpoint
+**Method:** POST  
+**Endpoint:** `/captains/register`
+
+## Description
+This endpoint is used to register a new captain. It requires the captain's personal information and vehicle details.
+
+## Request Body
+The request body should be a JSON object with the following structure:
+```json
+{
+  "fullname": {
+    "firstname": "string",
+    "lastname": "string"
+  },
+  "email": "string",
+  "password": "string",
+  "vehicle": {
+    "color": "string",
+    "plate": "string",
+    "capacity": "number",
+    "vehicleType": "string"
+  }
+}
+```
+
+### Fields
+- `fullname.firstname` (string, required): The first name of the captain. Must be at least 3 characters long.
+- `fullname.lastname` (string, optional): The last name of the captain.
+- `email` (string, required): The email address of the captain. Must be a valid email format.
+- `password` (string, required): The password for the captain account. Must be at least 5 characters long.
+-`vehicle.object`:
+  - `vehicle.color` (string, required): The color of the vehicle. Must be at least 3 characters long.
+  - `vehicle.plate` (string, required): The license plate number. Must be at least 3 characters long.
+  - `vehicle.capacity` (number, required): The passenger capacity. Must be at least 1.
+  - `vehicle.vehicleType` (string, required): The type of vehicle. Must be one of: 'car', 'motorcycle', 'auto'.
+
+## Responses
+
+### Success
+- **Status Code:** 201 Created
+- **Response Body:**
+  ```json
+  {
+    "token": "string",
+    "captain": {
+      "_id": "string",
+      "fullname": {
+        "firstname": "string",
+        "lastname": "string"
+      },
+      "email": "string",
+      "vehicle": {
+        "color": "string",
+        "plate": "string",
+        "capacity": "number",
+        "vehicleType": "string"
+      }
+    }
+  }
+  ```
+
+### Error
+- **Status Code:** 400 Bad Request
+- **Response Body:**
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "string",
+        "param": "string",
+        "location": "string"
+      }
+    ]
+  }
+  ```
+
+## Example Request
+```bash
+curl -X POST http://localhost:3000/captains/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.driver@example.com",
+    "password": "password123",
+    "vehicle": {
+      "color": "black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }'
+```
+
+## Example Response
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "60d0fe4f5311236168a109ca",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.driver@example.com",
+    "vehicle": {
+      "color": "black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+
+
+```
+
+## Example Response
+
+
+**captain** (object):  
+- **fullname** (object):  
+  - **firstname** (string): User's first name  
+  - **lastname** (string): User's last name  
+
+- **email** (string): User's email address  
+- **password** (string): User's password  
+
+**vehicle** (object):  
+- **color** (string): Vehicle color  
+- **capacity** (number): Vehicle capacity  
+- **vehicleType** (string): Vehicle type  
+- **plate** (string): Vehicle number plate  
+
+**token** (string): JWT Token  
+
